@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/tieto-cem/terraform-aws-alb.svg?style=shield&circle-token=da511655061cf24d067b99b4311ac5204ba9cd31)](https://circleci.com/gh/tieto-cem/terraform-aws-alb)
+
 Terraform ALB module
 ====================
 
