@@ -32,7 +32,7 @@ data "aws_subnet_ids" "public_subnet_ids" {
 }
 
 module "alb" {
-  source                 = ".."
+  source                 = "github.com/tieto-cem/terraform-aws-alb?ref=v0.1.0"
   name_prefix            = "alb-example"
   lb_internal            = false
   lb_subnet_ids          = "${data.aws_subnet_ids.public_subnet_ids.ids}"
