@@ -37,7 +37,7 @@ resource "aws_alb_target_group" "default_target_group" {
   health_check {
     interval = "${var.tg_health_check_interval}"
     path = "${var.tg_health_check_path}"
-    port = "${var.tg_port}"
+    port = "${var.tg_health_check_port}"
     protocol = "${var.tg_protocol}"
     healthy_threshold = "${var.tg_health_check_healthy_threshold}"
     unhealthy_threshold = "${var.tg_health_check_unhealthy_threshold}"
