@@ -33,7 +33,7 @@ data "aws_subnet_ids" "public_subnet_ids" {
 
 module "alb" {
   source                 = "github.com/tieto-cem/terraform-aws-alb?ref=v0.1.0"
-  name_prefix            = "alb-example"
+  name                   = "alb-example"
   lb_internal            = false
   lb_subnet_ids          = "${data.aws_subnet_ids.public_subnet_ids.ids}"
   lb_security_group_ids  = ["sg-12345678"]
@@ -50,9 +50,9 @@ This module names AWS resources as follows:
 
 | Name                               | Type           | 
 |------------------------------------|----------------|
-|${var.name_prefix}-alb              | Load Balancer  |
-|${var.name_prefix}-default-tg       | Target Group   |
-|${var.name_prefix}-alb-access-logs  | S3 Bucket      |    
+|${var.name}                         | Load Balancer  |
+|${var.name}-default-tg              | Target Group   |
+|${var.name}-alb-access-logs         | S3 Bucket      |    
  
 
 

@@ -49,7 +49,7 @@ EOF
 
 module "alb" {
   source                 = ".."
-  name_prefix            = "alb-example"
+  name            = "alb-example"
   lb_internal            = false
   lb_subnet_ids          = "${data.aws_subnet_ids.public_subnet_ids.ids}"
   lb_security_group_ids  = ["${module.alb_sg.id}"]

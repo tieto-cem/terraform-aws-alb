@@ -1,5 +1,5 @@
-variable "name_prefix" {
-  description = "Name prefix to use when naming resources"
+variable "name" {
+  description = "Name the ALB"
 }
 
 #----------------------

@@ -6,7 +6,7 @@ data "aws_caller_identity" "current" {}
 # Load balancer
 #-------------------------
 resource "aws_lb" "lb" {
-  name               = "${var.name_prefix}-alb"
+  name               = "${var.name}"
   load_balancer_type = "application"
   internal           = "${var.lb_internal}"
   security_groups    = ["${var.lb_security_group_ids}"]
@@ -18,7 +18,7 @@ resource "aws_lb" "lb" {
   }
 
   tags {
-    Name = "${var.name_prefix}-alb"
+    Name = "${var.name}-alb"
   }
 }
 
@@ -27,7 +27,7 @@ resource "aws_lb" "lb" {
 #--------------------------
 
 resource "aws_alb_target_group" "default_target_group" {
-  name                 = "${var.name_prefix}-default-tg"
+  name                 = "${var.name}-default-tg"
   port                 = "${var.tg_port}"
   protocol             = "${var.tg_protocol}"
   vpc_id               = "${var.tg_vpc_id}"
@@ -82,7 +82,7 @@ resource "aws_lb_listener" "http_listener" {
 #  Access log bucket
 #--------------------------
 resource "aws_s3_bucket" "alb_access_log_bucket" {
-  bucket        = "${var.name_prefix}-alb-access-logs"
+  bucket        = "${var.name}-alb-access-logs"
   acl           = "private"
   force_destroy = "${var.log_force_destroy}"
   policy        = <<EOF
@@ -94,7 +94,7 @@ resource "aws_s3_bucket" "alb_access_log_bucket" {
       "Sid": "ELBPolicyStatement",
       "Action": "s3:PutObject",
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.name_prefix}-alb-access-logs/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+      "Resource": "arn:aws:s3:::${var.name}-alb-access-logs/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
       "Principal": {
         "AWS": "${data.aws_elb_service_account.main_account.arn}"
       }
@@ -104,7 +104,7 @@ resource "aws_s3_bucket" "alb_access_log_bucket" {
 EOF
 
   lifecycle_rule {
-    id      = "${var.name_prefix}-alb-access-logs-lifecycle"
+    id      = "${var.name}-alb-access-logs-lifecycle"
     prefix  = ""
     enabled = "${var.log_expiration_enabled}"
     expiration {
@@ -113,6 +113,6 @@ EOF
   }
 
   tags {
-    Name = "${var.name_prefix}-alb-access-logs"
+    Name = "${var.name}-alb-access-logs"
   }
 }
