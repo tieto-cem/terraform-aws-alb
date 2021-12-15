@@ -8,12 +8,12 @@ variable "name" {
 
 variable "lb_subnet_ids" {
   description = "A list of subnet IDs to attach to the LB"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "lb_security_group_ids" {
   description = "Security groups to associated with the ALB. Security group is created automatically if not specified"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
 

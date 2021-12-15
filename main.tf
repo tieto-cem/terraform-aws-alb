@@ -9,15 +9,15 @@ resource "aws_lb" "lb" {
   name               = "${var.name}"
   load_balancer_type = "application"
   internal           = "${var.lb_internal}"
-  security_groups    = ["${var.lb_security_group_ids}"]
+  security_groups    = var.lb_security_group_ids
   idle_timeout       = "${var.lb_idle_timeout}"
-  subnets            = ["${var.lb_subnet_ids}"]
+  subnets            = var.lb_subnet_ids
 
   access_logs {
     bucket = "${aws_s3_bucket.alb_access_log_bucket.bucket}"
   }
 
-  tags {
+  tags = {
     Name = "${var.name}-alb"
   }
 }
@@ -112,7 +112,7 @@ EOF
     }
   }
 
-  tags {
+  tags = {
     Name = "${var.name}-alb-access-logs"
   }
 }
