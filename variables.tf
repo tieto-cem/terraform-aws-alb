@@ -141,3 +141,8 @@ variable "log_force_destroy" {
   description = "Whether access log bucket should be destroyed even if it contains objects or not"
   default     = true
 }
+
+variable "enable_access_logs" {
+  description = "Whether or not enable access logs in bucket"
+  default = true
+}

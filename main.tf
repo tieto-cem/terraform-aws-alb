@@ -14,7 +14,8 @@ resource "aws_lb" "lb" {
   subnets            = var.lb_subnet_ids
 
   access_logs {
-    bucket = "${aws_s3_bucket.alb_access_log_bucket.bucket}"
+    bucket  = "${aws_s3_bucket.alb_access_log_bucket.bucket}"
+    enabled = var.enable_access_logs
   }
 
   tags = {
