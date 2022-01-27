@@ -12,6 +12,8 @@ resource "aws_lb" "lb" {
   security_groups    = var.lb_security_group_ids
   idle_timeout       = "${var.lb_idle_timeout}"
   subnets            = var.lb_subnet_ids
+  
+  enable_deletion_protection = var.lb_enable_deletion_protection
 
   access_logs {
     bucket  = "${aws_s3_bucket.alb_access_log_bucket.bucket}"

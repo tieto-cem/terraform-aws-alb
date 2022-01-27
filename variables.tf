@@ -27,6 +27,12 @@ variable "lb_idle_timeout" {
   default     = 60
 }
 
+variable "lb_enable_deletion_protection" {
+  description = "Deletion protection for ALB. Defaults to false."
+  type        = bool
+  default     = false
+}
+
 #--------------------------------
 # Default Target Group settings - variables have tg_ prefix
 #--------------------------------
