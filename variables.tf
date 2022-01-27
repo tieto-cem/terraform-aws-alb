@@ -146,3 +146,7 @@ variable "enable_access_logs" {
   description = "Whether or not enable access logs in bucket"
   default = true
 }
+
+variable "access_log_bucket_name" {
+  description = "Name of the access log bucket. If not defined, the name is taken from variable 'name'"
+}

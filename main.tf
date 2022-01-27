@@ -82,8 +82,12 @@ resource "aws_lb_listener" "http_listener" {
 #--------------------------
 #  Access log bucket
 #--------------------------
+locals {
+  bucket_name   = try(var.access_log_bucket_name, "${var.name}-alb-access-logs")
+}
+
 resource "aws_s3_bucket" "alb_access_log_bucket" {
-  bucket        = "${var.name}-alb-access-logs"
+  bucket        = local.bucket_name
   acl           = "private"
   force_destroy = "${var.log_force_destroy}"
   policy        = <<EOF
@@ -95,7 +99,7 @@ resource "aws_s3_bucket" "alb_access_log_bucket" {
       "Sid": "ELBPolicyStatement",
       "Action": "s3:PutObject",
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.name}-alb-access-logs/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+      "Resource": "arn:aws:s3:::${local.bucket_name}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
       "Principal": {
         "AWS": "${data.aws_elb_service_account.main_account.arn}"
       }
@@ -105,7 +109,7 @@ resource "aws_s3_bucket" "alb_access_log_bucket" {
 EOF
 
   lifecycle_rule {
-    id      = "${var.name}-alb-access-logs-lifecycle"
+    id      = "${var.name}-access-logs-lifecycle"
     prefix  = ""
     enabled = "${var.log_expiration_enabled}"
     expiration {
@@ -114,6 +118,6 @@ EOF
   }
 
   tags = {
-    Name = "${var.name}-alb-access-logs"
+    Name = "${var.name}-access-logs"
   }
 }
