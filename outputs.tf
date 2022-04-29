@@ -43,3 +43,7 @@ output "target_group_arn" {
   description = "The ARN of the default target group"
   value = "${aws_alb_target_group.default_target_group.arn}"
 }
+
+output "access_log_bucket" {
+  value = aws_s3_bucket.alb_access_log_bucket
+}
