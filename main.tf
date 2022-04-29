@@ -9,15 +9,18 @@ resource "aws_lb" "lb" {
   name               = "${var.name}"
   load_balancer_type = "application"
   internal           = "${var.lb_internal}"
-  security_groups    = ["${var.lb_security_group_ids}"]
+  security_groups    = var.lb_security_group_ids
   idle_timeout       = "${var.lb_idle_timeout}"
-  subnets            = ["${var.lb_subnet_ids}"]
+  subnets            = var.lb_subnet_ids
+  
+  enable_deletion_protection = var.lb_enable_deletion_protection
 
   access_logs {
-    bucket = "${aws_s3_bucket.alb_access_log_bucket.bucket}"
+    bucket  = "${aws_s3_bucket.alb_access_log_bucket.bucket}"
+    enabled = var.enable_access_logs
   }
 
-  tags {
+  tags = {
     Name = "${var.name}-alb"
   }
 }
@@ -81,8 +84,12 @@ resource "aws_lb_listener" "http_listener" {
 #--------------------------
 #  Access log bucket
 #--------------------------
+locals {
+  bucket_name   = try(var.access_log_bucket_name, "${var.name}-alb-access-logs")
+}
+
 resource "aws_s3_bucket" "alb_access_log_bucket" {
-  bucket        = "${var.name}-alb-access-logs"
+  bucket        = local.bucket_name
   acl           = "private"
   force_destroy = "${var.log_force_destroy}"
   policy        = <<EOF
@@ -94,7 +101,7 @@ resource "aws_s3_bucket" "alb_access_log_bucket" {
       "Sid": "ELBPolicyStatement",
       "Action": "s3:PutObject",
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.name}-alb-access-logs/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
+      "Resource": "arn:aws:s3:::${local.bucket_name}/AWSLogs/${data.aws_caller_identity.current.account_id}/*",
       "Principal": {
         "AWS": "${data.aws_elb_service_account.main_account.arn}"
       }
@@ -104,7 +111,7 @@ resource "aws_s3_bucket" "alb_access_log_bucket" {
 EOF
 
   lifecycle_rule {
-    id      = "${var.name}-alb-access-logs-lifecycle"
+    id      = "${var.name}-access-logs-lifecycle"
     prefix  = ""
     enabled = "${var.log_expiration_enabled}"
     expiration {
@@ -112,7 +119,7 @@ EOF
     }
   }
 
-  tags {
-    Name = "${var.name}-alb-access-logs"
+  tags = {
+    Name = "${var.name}-access-logs"
   }
 }

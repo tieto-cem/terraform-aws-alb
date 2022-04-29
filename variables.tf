@@ -8,12 +8,12 @@ variable "name" {
 
 variable "lb_subnet_ids" {
   description = "A list of subnet IDs to attach to the LB"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "lb_security_group_ids" {
   description = "Security groups to associated with the ALB. Security group is created automatically if not specified"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
 
@@ -25,6 +25,12 @@ variable "lb_internal" {
 variable "lb_idle_timeout" {
   description = "The time in seconds that the connection is allowed to be idle before it is closed. This affects both inbound and outbound connections"
   default     = 60
+}
+
+variable "lb_enable_deletion_protection" {
+  description = "Deletion protection for ALB. Defaults to false."
+  type        = bool
+  default     = false
 }
 
 #--------------------------------
@@ -140,4 +146,13 @@ variable "log_expires_after" {
 variable "log_force_destroy" {
   description = "Whether access log bucket should be destroyed even if it contains objects or not"
   default     = true
+}
+
+variable "enable_access_logs" {
+  description = "Whether or not enable access logs in bucket"
+  default = true
+}
+
+variable "access_log_bucket_name" {
+  description = "Name of the access log bucket. If not defined, the name is taken from variable 'name'"
 }
