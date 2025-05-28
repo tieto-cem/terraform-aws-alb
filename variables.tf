@@ -7,7 +7,7 @@ variable "name" {
 #----------------------
 
 variable "lb_subnet_ids" {
-  description = "A list of subnet IDs to attach to the LB"
+  description = "A list of subnet IDs to attach to the LB. For public ALB, subnets must be public subnets. For internal ALB, subnets must be private subnets"
   type        = list(string)
 }
 
@@ -30,13 +30,13 @@ variable "lb_idle_timeout" {
 variable "lb_enable_deletion_protection" {
   description = "Deletion protection for ALB. Defaults to false."
   type        = bool
-  default     = false
+  default     = true
 }
 
 #--------------------------------
 # Default Target Group settings - variables have tg_ prefix
 #--------------------------------
-
+/*
 variable "tg_vpc_id" {
   description = "The identifier of the VPC in which to create the target group"
 }
@@ -91,6 +91,16 @@ variable "tg_health_check_matcher" {
 #--------------------------------------------
 # Default target group health check settings
 #--------------------------------------------
+*/
+
+
+variable "default_listener_action" {
+  description = "Optional default_action block for the ALB listener"
+  type        = any
+  default     = null
+}
+
+
 
 #--------------------------
 # HTTP listener settings
@@ -155,4 +165,5 @@ variable "enable_access_logs" {
 
 variable "access_log_bucket_name" {
   description = "Name of the access log bucket. If not defined, the name is taken from variable 'name'"
+  default = null
 }
